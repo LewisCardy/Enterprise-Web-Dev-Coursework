@@ -20,7 +20,7 @@ function App() {
 
 
   return (
-    <div class="text-wsBlac h-screen">
+    <div class=" text-slate-700 h-screen font-title">
       <RouterProvider router={router}/>
         
     </div>
