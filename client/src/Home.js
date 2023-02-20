@@ -1,9 +1,35 @@
+import React, {useState} from "react";
+
 export const Home = () => {
+    const [employeeList, setEmployeeList] = useState([{employee: ""}]);
+
+    const EmployeeAdd = () => {
+        setEmployeeList([...employeeList, {employee: ""}]);
+    }
+
+    const EmployeeRemove = (index) => {
+        const newEmployeeList = [...employeeList];
+        newEmployeeList.splice(index, 1);
+        setEmployeeList(newEmployeeList);
+    }
+
+    const [itemList, setItemList] = useState([{item: ""}]);
+
+    const ItemAdd = () => {
+        setItemList([...itemList, {item: ""}]);
+    }
+
+    const ItemRemove = (index) => {
+        const newItemList = [...itemList];
+        newItemList.splice(index, 1);
+        setItemList(newItemList);
+    }
+
     return (
         <div>
             
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md" >
-            <h1 class="text-2xl mb-5">Generate a quote for your project</h1>
+            <h1 class="text-2xl mb-5 p-5">Generate a quote for your project</h1>
                 <div class="py-2 px-6 shadow rounded-lg sm:px-10">
                     <form class="mb-0 space-y-6">
                         <div>
@@ -23,9 +49,10 @@ export const Home = () => {
                         </div>
                         <div>
                             <h2>Employees</h2>
-                            <div class="flex space-x-5">
+                            {employeeList.map((singleEmployee, index) => (
+                                <div class="flex space-x-5">
                                 <div>
-                                    <label class="block text-sm text-gray-600">Project Name</label>
+                                    <label class="block text-sm text-gray-600">Employee Name</label>
                                         <div class="mt-1">
                                             <input type="text" class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
                                         </div>
@@ -33,31 +60,50 @@ export const Home = () => {
                                 <div>
                                     <label class="block text-sm text-gray-600">Type</label>
                                         <div class="mt-1">
-                                            <select class="text-s w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400">
-                                                <option>Junior</option>
-                                                <option>Standard</option>
-                                                <option>Senior</option>
+                                            <select class="border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400">
+                                                <option class="text-sm">Junior</option>
+                                                <option class="text-sm">Standard</option>
+                                                <option class="text-sm">Senior</option>
                                             </select>
-                                        </div>  
+                                        </div>    
                                 </div>
-                            </div>
+                                {employeeList.length > 1 && <div class="mt-4"> 
+                                    <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 px-3 text-center hover:bg-orange-500 hover:font-semibold" type="button" onClick={() => EmployeeRemove(index)}>X</button>
+                                    </div>
+                                } 
+                                
+                                </div>    
+                            ))}
                             
+                            <div class="flex justify-end">
+                                <button class="hover:text-orange-500 hover:font-semibold text-sm text-blue-400" type="button" onClick={EmployeeAdd}>Add Employee</button>
+                            </div>
                         </div>
                         <div>
                             <h2>Extras</h2>
-                            <div class="flex space-x-5">
-                                <div>
-                                    <label class="block text-sm text-gray-600">Item Name</label>
-                                        <div class="mt-1">
-                                            <input type="text" class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
-                                        </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm text-gray-600">Price (£)</label>
-                                    <div class="mt-1">
-                                        <input type="number" class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
+                            {itemList.map((singleItem, index) => (
+                                <div class="flex space-x-5">
+                                    <div>
+                                        <label class="block text-sm text-gray-600">Item Name</label>
+                                            <div class="mt-1">
+                                                <input type="text" class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
+                                            </div>
                                     </div>
+                                    <div>
+                                        <label class="block text-sm text-gray-600">Price (£)</label>
+                                        <div class="mt-1">
+                                            <input type="number" class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
+                                        </div>
+                                    </div>
+                                    {itemList.length > 1 && <div class="mt-4"> 
+                                    <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 px-3 text-center hover:bg-orange-500 hover:font-semibold" type="button" onClick={() => ItemRemove(index)}>X</button>
+                                    </div>
+                                }
                                 </div>
+                            ))}
+                            
+                            <div class="flex justify-end">
+                                <button class="hover:text-orange-500 hover:font-semibold text-sm text-blue-400" type="button" onClick={ItemAdd}>Add Item</button>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 justify-center">
