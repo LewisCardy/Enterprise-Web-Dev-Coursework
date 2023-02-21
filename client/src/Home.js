@@ -1,10 +1,11 @@
 import React, {useState} from "react";
+import Axios from "axios";
 
 export const Home = () => {
-    const [employeeList, setEmployeeList] = useState([{employee: ""}]);
-
+    const [employeeList, setEmployeeList] = useState([{employeeType: "", employeeHours: ""}]);
+    // console.log (employeeList);
     const EmployeeAdd = () => {
-        setEmployeeList([...employeeList, {employee: ""}]);
+        setEmployeeList([...employeeList, {employeeType: "", employeeHours: ""}]);
     }
 
     const EmployeeRemove = (index) => {
@@ -25,6 +26,28 @@ export const Home = () => {
         setItemList(newItemList);
     }
 
+    const url = ""
+    const [quote, setQuote] = useState({
+        projectName: "",
+        projectDescription: "",
+        employees: [],
+        items: []
+    })
+    function handleQuoteChange(e){
+        const newQuote={...quote}
+        newQuote[e.target.id] = e.target.value
+        newQuote.employees = employeeList
+        setQuote(newQuote)
+        
+    }
+
+    const handleEmployeeChange = (e, index) => {
+        const {name, value} = e.target
+        const newEmployeeList = [...employeeList];
+        newEmployeeList[index][name] = value;
+        setEmployeeList(newEmployeeList)
+    }
+    console.log(quote)
     return (
         <div>
             
@@ -37,13 +60,13 @@ export const Home = () => {
                             <div>
                                 <label class="block text-sm text-gray-600">Project Name</label>
                                 <div class="mt-1">
-                                    <input type="text" class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
+                                    <input type="text" onChange={(e)=>handleQuoteChange(e)} id="projectName" value={quote.projectName} class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600">Project Description</label>
                                 <div class="mt-1">
-                                    <textarea class="w-full border text-xs border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></textarea>
+                                    <textarea onChange={(e)=>handleQuoteChange(e)} id="projectDescription" value={quote.projectDescription} type="text" class="w-full border text-xs border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -51,21 +74,22 @@ export const Home = () => {
                             <h2>Employees</h2>
                             {employeeList.map((singleEmployee, index) => (
                                 <div class="flex space-x-5">
-                                <div>
-                                    <label class="block text-sm text-gray-600">Employee Name</label>
-                                        <div class="mt-1">
-                                            <input type="text" class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
-                                        </div>
-                                </div>
+                                
                                 <div>
                                     <label class="block text-sm text-gray-600">Type</label>
                                         <div class="mt-1">
-                                            <select class="border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400">
+                                            <select name="employeeType" onChange={(e)=> {handleEmployeeChange(e, index); handleQuoteChange(e)}} class="border w-44 border-gray-200 px-5 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400">
                                                 <option class="text-sm">Junior</option>
                                                 <option class="text-sm">Standard</option>
                                                 <option class="text-sm">Senior</option>
                                             </select>
                                         </div>    
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-600">Hours Work</label>
+                                        <div class="mt-1">
+                                            <input type="number" name="employeeHours" onChange={(e)=> handleEmployeeChange(e, index)} class="border w-20 border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
+                                        </div>
                                 </div>
                                 {employeeList.length > 1 && <div class="mt-4"> 
                                     <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 px-3 text-center hover:bg-orange-500 hover:font-semibold" type="button" onClick={() => EmployeeRemove(index)}>X</button>
