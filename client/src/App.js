@@ -4,6 +4,9 @@ import {Home} from "./Home"
 import {Login} from "./Login"
 import {Quotes} from "./Quotes"
 import {Register} from "./Register"
+import axios from 'axios';
+
+axios.defaults.baseURL="http://localhost:5000/"
 
 function App() {
   const router = createBrowserRouter(
