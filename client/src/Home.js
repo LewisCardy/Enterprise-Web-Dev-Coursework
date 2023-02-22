@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, setState} from "react";
 import Axios from "axios";
 
 export const Home = () => {
@@ -52,6 +52,15 @@ export const Home = () => {
             console.log(res.quote)
         })
     }
+
+    function getQuote(){
+        Axios.get("/sendQuote").then( res =>{
+            const quote = res.data;
+            this.setState({text: quote})
+        });
+        return quote;
+    }
+
 
     const handleEmployeeChange = (e, index) => {
         const {name, value} = e.target
@@ -149,11 +158,11 @@ export const Home = () => {
                             </div>
                         </div>
                         <div class="grid grid-cols-1 justify-center">
-                            <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={(e)=> sendQuote(e)}>Get Quote</button>
+                            <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={(e)=> {sendQuote(e); getQuote()}}>Get Quote</button>
                         </div>
                         <div class="grid grid-cols-2 items-center justify-center">
                             <h3 class="">Your Final Quote Is...</h3>
-                            <h1 class=" text-4xl underline text-orange-400">£125000</h1>
+                            <h1 class=" text-4xl underline text-orange-400">{}</h1>
                         </div>
                         
                     </form>
