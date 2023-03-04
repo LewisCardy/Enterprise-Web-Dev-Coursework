@@ -39,7 +39,7 @@ export const Home = () => {
         setItemList(newItemList)
     }
 
-    const url = "/getQuote"
+    const url = "/quotes/getQuote"
     const [quote, setQuote] = useState({ //structure of the quote to be updated and sent to the backend
         projectName: "",
         projectDescription: "",
@@ -69,10 +69,22 @@ export const Home = () => {
 
     const [finalQuote, setFinalQuote] = useState({text: ""}) //used for getting the quote back from the server
     function getQuote(){
-        Axios.get("/sendQuote").then( res =>{ //gets the quote calculation from the server and updates the text
+        Axios.get("/quotes/sendQuote").then( res =>{ //gets the quote calculation from the server and updates the text
             const newFinalQuote = res.data;
             setFinalQuote({text: newFinalQuote})
         });
+    }
+
+    function saveQuote(e){ //sends the quote to the url in the server which will handle the data, process and calcualte the final quote
+        e.preventDefault()
+        Axios.post("/quotes/saveQuote",{
+            projectName: quote.projectName,
+            projectDescription: quote.projectDescription,
+            employees: quote.employees,
+            items: quote.items
+        }).then(res=>{
+            console.log(res.quote)
+        })
     }
     
     
@@ -174,7 +186,7 @@ export const Home = () => {
                         
                     </form>
                     <div class="flex justify-end mt-5">
-                            <button class="bg-orange-400 rounded-lg shadow-lg p-2 hover:bg-orange-500 hover:font-semibol">Save Quote</button>
+                            <button class="bg-orange-400 rounded-lg shadow-lg p-2 hover:bg-orange-500 hover:font-semibol" type="button" onClick={(e) => {saveQuote(e)}}>Save Quote</button>
                     </div>
                 </div>
             </div>
