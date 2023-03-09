@@ -1,9 +1,9 @@
 import React from 'react'
 import {createBrowserRouter, createRoutesFromElements, Route, Link, Outlet, RouterProvider} from 'react-router-dom'
-import {Home} from "./Home"
-import {Login} from "./Login"
-import {Quotes} from "./Quotes"
-import {Register} from "./Register"
+import {Home} from "./components/Home"
+import {Login} from "./components/Login"
+import {Quotes} from "./components/Quotes"
+import {Register} from "./components/Register"
 import axios from 'axios';
 
 axios.defaults.baseURL="http://localhost:5000/"
