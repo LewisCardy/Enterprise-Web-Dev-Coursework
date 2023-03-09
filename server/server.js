@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost/quotesdb");
 const db = mongoose.connection;
 db.on('error', (error) => console.error(error));
 db.on('open', () => console.log("connected to database"));

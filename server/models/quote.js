@@ -10,11 +10,11 @@ const quoteSchema = new mongoose.Schema({
         required: true
     }, 
     employees: {
-        type: String,
+        type: [{employeeType: String, employeeHours: String}],
         required: true
     },
     items: {
-        type: String,
+        type: [{itemName: String, itemPrice: String}],
         required: true
     },
     finalQuote: {

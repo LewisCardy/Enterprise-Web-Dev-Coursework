@@ -131,7 +131,7 @@ export const Home = () => {
                                 <div>
                                     <label class="block text-sm text-gray-600">Hours Work</label>
                                         <div class="mt-1">
-                                            <input type="text" name="employeeHours" onChange={(e)=> {handleEmployeeChange(e, index); handleQuoteChange(e)}} class="border w-20 border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
+                                            <input type="number" name="employeeHours" onChange={(e)=> {handleEmployeeChange(e, index); handleQuoteChange(e)}} class="border w-20 border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
                                         </div>
                                 </div>
                                 {employeeList.length > 1 && <div class="mt-4"> 
@@ -186,7 +186,7 @@ export const Home = () => {
                         
                     </form>
                     <div class="flex justify-end mt-5">
-                            <button class="bg-orange-400 rounded-lg shadow-lg p-2 hover:bg-orange-500 hover:font-semibol" type="button" onClick={(e) => {saveQuote(e)}}>Save Quote</button>
+                            <button class="bg-orange-400 rounded-lg shadow-lg p-2 hover:bg-orange-500 hover:font-semibol" type="button" onClick={(e) => saveQuote(e)}>Save Quote</button>
                     </div>
                 </div>
             </div>

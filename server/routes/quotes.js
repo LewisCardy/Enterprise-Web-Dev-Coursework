@@ -1,7 +1,7 @@
 const express = require('express');
-const quote = require('../models/quote');
+const quote = require('../models/Quote');
 const router = express.Router()
-const Quote = require('../models/quote')
+const Quote = require('../models/Quote')
 
 let finalCost = 0; //final quote cost
 
@@ -16,8 +16,9 @@ router.get('/sendQuote', (req, res) => { //sends the new calculated quote back t
     console.log(quotePrice)
 });
 
-router.get('/saveQuote', async(req, res) => {
+router.use('/saveQuote', async(req, res) => {
     let data = req.body;
+    console.log(finalCost)
     const quote = new Quote({
         projectName: data.projectName,
         projectDescription: data.projectDescription,
@@ -25,7 +26,7 @@ router.get('/saveQuote', async(req, res) => {
         items: data.items,
         finalQuote: finalCost.toString()
 
-    })
+    });
     const newQuote = await quote.save()
     console.log(quote);
 });
