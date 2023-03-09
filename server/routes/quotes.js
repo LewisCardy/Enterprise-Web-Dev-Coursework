@@ -1,9 +1,13 @@
 const express = require('express');
+const { default: mongoose } = require('mongoose');
 const quote = require('../models/Quote');
 const router = express.Router()
 const Quote = require('../models/Quote')
 
 let finalCost = 0; //final quote cost
+let totalPay = 0;
+let totalHours = 0;
+let itemPrice = 0;
 
 router.use('/getQuote', (req, res) => { //gets the quote sent from the front end
     let data = req.body;
@@ -19,17 +23,30 @@ router.get('/sendQuote', (req, res) => { //sends the new calculated quote back t
 router.use('/saveQuote', async(req, res) => {
     let data = req.body;
     console.log(finalCost)
-    const quote = new Quote({
-        projectName: data.projectName,
-        projectDescription: data.projectDescription,
-        employees: data.employees,
-        items: data.items,
-        finalQuote: finalCost.toString()
-
-    });
-    const newQuote = await quote.save()
-    console.log(quote);
+    try {
+        const quote = new Quote({
+            projectName: data.projectName,
+            projectDescription: data.projectDescription,
+            employeePay: totalPay,
+            employeeHours: totalHours,
+            items: itemPrice,
+            finalQuote: finalCost.toString()
+    
+        });
+        const newQuote = await quote.save()
+        console.log(quote);
+    } catch (e) {
+        console.log(e.message)
+    }
+    
 });
+
+router.get('/getAllQuotes', async(req, res) => {
+    const quoteData = await Quote.find()
+    res.json(quoteData);
+});
+
+
 
 
 function CalculateProjectCost(data){ //calculates the quote using the data sent from the front end
@@ -67,11 +84,12 @@ function CalculateEmployeeCost(data){ //calculates the pay for the employees
     let totalStandardPay = standardHours * standardPay;
     let totalSeniorPay = seniorHours * seniorPay;
     
-    let totalPay = totalJuniorPay + totalStandardPay + totalSeniorPay; //total pay for employees
+    totalPay = totalJuniorPay + totalStandardPay + totalSeniorPay; //total pay for employees
+    totalHours = juniorHours + standardHours + seniorHours;
     return totalPay;
 }
 function CalculateItemCost(data){ //calculates the cost of the extra items
-    let itemPrice = 0;
+    itemPrice = 0;
     let items = data.items;
 
     items.forEach(item => { //for each item run a total of the cost
