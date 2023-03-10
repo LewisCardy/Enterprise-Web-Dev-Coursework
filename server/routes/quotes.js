@@ -69,9 +69,14 @@ function CalculateEmployeeCost(data){ //calculates the pay for the employees
     let standardPay = 20;
     let seniorPay = 30;
 
+    let fudgeFactor = Math.floor(Math.random() * 1.5) + 0.5;
+
+    standardPay = standardPay *  fudgeFactor;
+
     //base hours
     let juniorHours = 0;
     let standardHours = 0;
+    
     let seniorHours = 0;
 
     let employees = data.employees; //employees array from the full data
