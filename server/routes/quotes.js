@@ -4,7 +4,7 @@ const quote = require('../models/Quote');
 const router = express.Router()
 const Quote = require('../models/Quote')
 
-let finalCost = 0; //final quote cost
+let finalCost; //final quote cost
 let totalPay = 0;
 let totalHours = 0;
 let itemPrice = 0;
@@ -44,6 +44,13 @@ router.use('/saveQuote', async(req, res) => {
 router.get('/getAllQuotes', async(req, res) => {
     const quoteData = await Quote.find()
     res.json(quoteData);
+});
+
+router.use('/deleteQuote', async(req, res) => {
+    let quoteName = req.body
+    console.log(quoteName)
+    const quoteData = await Quote.findOneAndDelete({projectName: quoteName.projectName})
+    console.log("Deleted Entry")
 });
 
 
