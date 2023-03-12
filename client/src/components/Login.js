@@ -1,4 +1,5 @@
 import {useRef, useState, useEffect} from 'react';
+import Axios from "axios";
 
 
 export const Login = () => {
@@ -23,7 +24,14 @@ export const Login = () => {
         console.log(userName, password)
         setUsername('');
         setPassword('');
+        Axios.post("/quotes/login",{
+            username: userName,
+            password: password
+        }).then(res=>{
+            console.log(res.quote)
+        })
         setSucess(true)
+
     }
 
 

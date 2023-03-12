@@ -1,8 +1,12 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
-const quote = require('../models/Quote');
 const router = express.Router()
 const Quote = require('../models/Quote')
+const UserAccount = require('../models/userAccount')
+const bcrypt = require('bcrypt')
+const passport = require('passport')
+const initializePassport = require('../passport-config')
+initializePassport(passport, username => UserAccount.find(user => user.username === username))
 
 let finalCost; //final quote cost
 let totalPay = 0;
@@ -53,7 +57,26 @@ router.use('/deleteQuote', async(req, res) => {
     console.log("Deleted Entry")
 });
 
+router.use('/login', async(req, res) => {
+    let user = req.body;
+    console.log(user)
+});
 
+router.use('/register', async(req, res) => {
+    console.log(req.body.password)
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        const user = new UserAccount({
+            username: req.body.username,
+            password: hashedPassword
+        });
+        const newUser = await user.save()
+        console.log(user)
+    } catch (e) {
+        console.log(e.message)
+    }
+    
+});
 
 
 function CalculateProjectCost(data){ //calculates the quote using the data sent from the front end
