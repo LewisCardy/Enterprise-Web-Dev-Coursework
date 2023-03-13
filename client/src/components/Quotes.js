@@ -6,7 +6,7 @@ export const Quotes = () => {
 
     useEffect(() => { //gets the quotes from the api and sets the quote data to the data fetched
         const getQuoteData = async () => {
-            const res = await fetch('/quotes/getAllQuotes');
+            const res = await fetch('http://localhost:5000/quotes/getAllQuotes');
             const getData = await res.json();
             setQuoteData(getData);
             console.log(getData)

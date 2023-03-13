@@ -5,8 +5,8 @@ const Quote = require('../models/Quote')
 const UserAccount = require('../models/userAccount')
 const bcrypt = require('bcrypt')
 const passport = require('passport')
-const initializePassport = require('../passport-config')
-initializePassport(passport, username => UserAccount.find(user => user.username === username))
+//const initializePassport = require('../passport-config')
+//initializePassport(passport, username => UserAccount.find(user => user.username === username))
 
 let finalCost; //final quote cost
 let totalPay = 0;
@@ -57,9 +57,32 @@ router.use('/deleteQuote', async(req, res) => {
     console.log("Deleted Entry")
 });
 
-router.use('/login', async(req, res) => {
-    let user = req.body;
-    console.log(user)
+router.post('/login', async(req, res) => { //the login route
+    let isDetailsCorrect = false;
+    try {
+        const user = await UserAccount.findOne({username: req.body.username}).lean().then(async(res) => { //finds if the user exists within the database with the username
+            const userFound = res //the found user
+            const isPasswordCorrect = await bcrypt.compare(req.body.password, userFound.password) //compares the password entered to the hashed password in database
+
+            if(isPasswordCorrect){ //if the password is correct
+                console.log("Success")
+                isDetailsCorrect = true
+            } else { //else incorrect
+                console.log("password incorrect")
+                isDetailsCorrect = false
+            }
+        }).catch((e) => { //if the user is not found
+            //console.log("User not found")
+            console.log("User Not Found")
+        })
+        if (isDetailsCorrect){ //if all details correct
+            res.send('Logged in')
+        } else { //else details incorrect
+            res.send('Username/Password Incorrect')
+        }
+    } catch (e) { //login route error
+        console.log(e.message)
+    }
 });
 
 router.use('/register', async(req, res) => {
