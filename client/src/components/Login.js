@@ -1,6 +1,7 @@
 import {useRef, useState, useEffect} from 'react';
 import Axios from "axios";
 import { Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 export const Login = () => {
@@ -9,13 +10,15 @@ export const Login = () => {
 
 
     const [loginMessage, setloginMessage] = useState('');
-    const [loginStatus, setLoginStatus] = useState(false);
-
-    const navigate = useNavigate();
+    const [loginStatus, setLoginStatus] = useState('');
     
-
     useEffect(() => {
-    }, [userName, password])
+        Axios.get("/quotes/login").then((res) => {
+            if(res.data.loggedIn == true){
+                setLoginStatus("Logged in as: " + res.data.user.username)
+            }
+        });
+    },[]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,19 +30,13 @@ export const Login = () => {
             username: userName,
             password: password
         }).then(res=>{
-            console.log(res)
+            console.log(res.data)
             setloginMessage(res.data)
-            
-            if (loginMessage == "Logged in"){
-                setLoginStatus(true)
-            }
         })
 
     }
-    const NavigateToHome = () => {
-        return (<Navigate to="/" replace/>)
-    }
 
+    
 
     return (
         <div>
@@ -48,8 +45,9 @@ export const Login = () => {
                 <div class="py-2 px-6 shadow rounded-lg sm:px-10">
                     <div class="text-xl text-orange-500 text-center">
                         <h1>{loginMessage}</h1>
+                        <h1>{loginStatus}</h1>
                     </div>
-                    <form onSubmit={(e) => {handleSubmit(e)}}
+                    <form onSubmit={(e) => {handleSubmit(e) }}
                          class="mb-0 space-y-6">
                         <div>
                             <div>

@@ -4,9 +4,6 @@ const router = express.Router()
 const Quote = require('../models/Quote')
 const UserAccount = require('../models/userAccount')
 const bcrypt = require('bcrypt')
-const passport = require('passport')
-//const initializePassport = require('../passport-config')
-//initializePassport(passport, username => UserAccount.find(user => user.username === username))
 
 let finalCost; //final quote cost
 let totalPay = 0;
@@ -57,6 +54,14 @@ router.use('/deleteQuote', async(req, res) => {
     console.log("Deleted Entry")
 });
 
+router.get('/login', (req, res) => {
+    if (req.session.user) {
+        res.send({loggedIn: true, user: req.session.user})
+    } else {
+        res.send({loggedIn: false})
+    }
+});
+
 router.post('/login', async(req, res) => { //the login route
     let isDetailsCorrect = false;
     try {
@@ -67,6 +72,8 @@ router.post('/login', async(req, res) => { //the login route
             if(isPasswordCorrect){ //if the password is correct
                 console.log("Success")
                 isDetailsCorrect = true
+                req.session.user = userFound; //creates session with user details
+                console.log(req.session.user)
             } else { //else incorrect
                 console.log("password incorrect")
                 isDetailsCorrect = false
@@ -76,6 +83,7 @@ router.post('/login', async(req, res) => { //the login route
             console.log("User Not Found")
         })
         if (isDetailsCorrect){ //if all details correct
+            
             res.send('Logged in')
         } else { //else details incorrect
             res.send('Username/Password Incorrect')
@@ -104,6 +112,7 @@ router.use('/register', async(req, res) => {
 
 function CalculateProjectCost(data){ //calculates the quote using the data sent from the front end
     finalCost = CalculateEmployeeCost(data) + CalculateItemCost(data)
+    console.log("FINAL COST" + finalCost)
     let projectName = data.projectName;
     let projectDescription = data.projectDescription;
     

@@ -6,13 +6,14 @@ import {Quotes} from "./components/Quotes"
 import {Register} from "./components/Register"
 import axios from 'axios';
 
-axios.defaults.baseURL="http://localhost:5000/"
+axios.defaults.baseURL="http://localhost:5000/";
+axios.defaults.withCredentials = true;
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Root />}>
-        <Route index element={<Home />}/>
+        <Route path='/' index element={<Home />}/>
         <Route path='/Login' element={<Login />}/>
         <Route path='/Register' element={<Register />}/>
         <Route path='/Quotes' element={<Quotes />}/>
