@@ -1,37 +1,42 @@
-import React from 'react'
+import {useState} from 'react'
 import {createBrowserRouter, createRoutesFromElements, Route, Link, Outlet, RouterProvider} from 'react-router-dom'
 import {Home} from "./components/Home"
 import {Login} from "./components/Login"
 import {Quotes} from "./components/Quotes"
 import {Register} from "./components/Register"
 import axios from 'axios';
+// import {ProtectedRoutes} from './components/ProtectedRoutes'
 
 axios.defaults.baseURL="http://localhost:5000/";
 axios.defaults.withCredentials = true;
 
 function App() {
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [loggedInUsername, setLoggedInUsername] = useState('');
+
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path='/' element={<Root />}>
-        <Route path='/' index element={<Home />}/>
-        <Route path='/Login' element={<Login />}/>
-        <Route path='/Register' element={<Register />}/>
-        <Route path='/Quotes' element={<Quotes />}/>
-      </Route>
+      <Route path='/' element={<Root loginStatus={loginStatus} loggedInUsername={loggedInUsername}  />}>
+        {/* <Route element={<ProtectedRoutes loggedIn={loginStatus}/>}> */}
+          <Route path='/' index element={<Home loggedInUser={loggedInUsername} />}/>
+          <Route path='/Login' element={<Login setLoginStatus={setLoginStatus} setLoggedInUsername={setLoggedInUsername}/>}/>
+          <Route path='/Register' element={<Register />}/>
+          <Route path='/Quotes' element={<Quotes loggedInUser={loggedInUsername} />}/>
+        </Route>
+      // </Route>
     )
   )
 
-
+  console.log(loginStatus)
 
   return (
     <div class=" text-slate-700 h-screen font-title">
       <RouterProvider router={router}/>
-        
     </div>
   )
 }
 
-const Root = () => {
+const Root = ({loginStatus, loggedInUsername}) => {
   return <> 
     <div class="grid grid-cols-2 p-4 font-title  bg-gray-100 items-center shadow-lg ">
       <div class="flex space-x-5 border-gray-700">
@@ -50,6 +55,8 @@ const Root = () => {
     </div>
     <div>
       <Outlet />
+      <h1>Login Status : {String(loginStatus)}</h1>
+      <h1>Logged in Username: {loggedInUsername}</h1>
     </div>
   </>
 }

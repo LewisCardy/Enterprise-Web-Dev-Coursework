@@ -23,15 +23,18 @@ router.get('/sendQuote', (req, res) => { //sends the new calculated quote back t
 
 router.use('/saveQuote', async(req, res) => {
     let data = req.body;
+    console.log(data)
     console.log(finalCost)
     try {
+        
         const quote = new Quote({
             projectName: data.projectName,
             projectDescription: data.projectDescription,
             employeePay: totalPay,
             employeeHours: totalHours,
             items: itemPrice,
-            finalQuote: finalCost.toString()
+            finalQuote: finalCost.toString(),
+            createdBy: data.username
     
         });
         const newQuote = await quote.save()
@@ -42,8 +45,11 @@ router.use('/saveQuote', async(req, res) => {
     
 });
 
-router.get('/getAllQuotes', async(req, res) => {
-    const quoteData = await Quote.find()
+router.use('/getAllQuotes', async(req, res) => {
+    let user = req.body.username
+    console.log(user)
+    const quoteData = await Quote.find({createdBy: user})
+    console.log(quoteData)
     res.json(quoteData);
 });
 
@@ -59,6 +65,13 @@ router.get('/login', (req, res) => {
         res.send({loggedIn: true, user: req.session.user})
     } else {
         res.send({loggedIn: false})
+    }
+});
+
+router.get('/logout', (req, res) => {
+    if(req.session.user) {
+        res.send({loggedIn: false})
+        req.session.destroy();
     }
 });
 

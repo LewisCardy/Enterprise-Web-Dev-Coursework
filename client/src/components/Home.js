@@ -2,7 +2,7 @@ import React, {useState, setState} from "react";
 import Axios from "axios";
 
 //the home component and main page for the website to calculate quotes
-export const Home = () => {
+export const Home = ({loggedInUser}) => {
     const [employeeList, setEmployeeList] = useState([{employeeType: "", employeeHours: ""}]); //list of employees to add multiple instead of one.
     const EmployeeAdd = () => { //adds employee input boxes to the webpage
         setEmployeeList([...employeeList, {employeeType: "", employeeHours: ""}]);
@@ -81,7 +81,8 @@ export const Home = () => {
             projectName: quote.projectName,
             projectDescription: quote.projectDescription,
             employees: quote.employees,
-            items: quote.items
+            items: quote.items,
+            username: loggedInUser
         }).then(res=>{
             console.log(res.quote)
         })

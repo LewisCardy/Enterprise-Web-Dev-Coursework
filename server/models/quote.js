@@ -26,6 +26,9 @@ const quoteSchema = new mongoose.Schema({
     finalQuote: {
         type: String,
         required: true
+    },
+    createdBy: {
+        type: String
     }
 })
 

@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import Axios from "axios";
 
-export const Quotes = () => {
+export const Quotes = ({loggedInUser}) => {
     const [quoteData, setQuoteData] = useState([]); //state for the quotes to go
 
     useEffect(() => { //gets the quotes from the api and sets the quote data to the data fetched
-        const getQuoteData = async () => {
-            const res = await fetch('http://localhost:5000/quotes/getAllQuotes');
-            const getData = await res.json();
-            setQuoteData(getData);
-            console.log(getData)
-        }
-        getQuoteData();
+        Axios.post("/quotes/getAllQuotes",{
+            username: loggedInUser
+        }).then(res=>{
+            setQuoteData(res.data);
+        })
+
+        
+        // const getQuoteData = async () => {
+        //     const res = await fetch('http://localhost:5000/quotes/getAllQuotes');
+        //     const getData = await res.json();
+        //     setQuoteData(getData);
+        //     console.log(getData)
+        // }
+        //getQuoteData();
     }, []);
     
     function deleteQuote(quoteName){ //deletes the quote
