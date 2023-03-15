@@ -1,0 +1,10 @@
+NOTES FOR WEBSITE
+
+need to figure out a way to keep the logged in state at page refresh generally 
+and due to the fact when a quote is removed the page refreshes.
+
+when logged in it stays when changing pages but after refresh the logged in state goes away.
+
+general cleanup, messy logs and missing a lot off ; at the end;
+
+useability will be improved when the major issue is fixed
