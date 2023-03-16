@@ -20,7 +20,7 @@ app.use(cookieParser())
 
 app.use(session({
     key: "UserId",
-    secret: cookieSecret,
+    secret: "SECRET TESTING",
     resave: false,
     saveUninitialized: false,
     cookie: {
