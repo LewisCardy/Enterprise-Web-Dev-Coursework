@@ -15,29 +15,43 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
     //let loginStatus = false;
     
     // useEffect(() => {
-    //     Axios.get("/quotes/login").then((res) => {
-    //         if(res.data.loggedIn == true){
-    //             setLoginStatus(true)
-    //             loginStatus = true;
-    //             setloginMessage("Logged in as: " + res.data.user.username)
-    //             setLoggedInUsername(res.data.user.username)
-    //         }
-    //     });
+        // Axios.get("/quotes/login").then((res) => {
+        //     if(res.data.loggedIn == true){
+        //         setLoginStatus(true)
+        //         loginStatus = true;
+        //         setloginMessage("Logged in as: " + res.data.user.username)
+        //         setLoggedInUsername(res.data.user.username)
+        //     }
+        // });
     // },[]);
     
-    const handleSubmit = async (e) => {
+    const handleLoginFormSubmit = async (e) => {
         e.preventDefault();
         //console.log(userName, password)
         
         setUsername('');
         setPassword('');
-        Axios.post("/quotes/login",{
+        await Axios.post("/quotes/login",{
             username: userName,
             password: password
         }).then(res=>{
             console.log(res.data)
             setloginMessage(res.data)
         })
+        await Axios.get("/quotes/login").then((res) => {
+            if(res.data.loggedIn == true){
+                setLoginStatus(true)
+                loginStatus = true;
+                setLoggedInUsername(res.data.user.username)
+                window.location.reload();
+                console.log("LOGIN CHECKED")
+            }
+        });
+    }
+
+    const Logout = async(e) => {
+        e.preventDefault();
+        
     }
 
     if(loginStatus == true){
@@ -56,6 +70,9 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
                     <Link to='/' class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5">Create a Quote</Link>
                     <Link to='/Quotes' class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5">View Quotes</Link>
                 </div>
+                <div class="flex justify-center mt-5">
+                    <button class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5 px-10">Logout</button>
+                </div>
             </div>
 
         </div>)
@@ -71,7 +88,7 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
                             <h1>{loginStatus}</h1>
                         </div>
                         
-                        <form onSubmit={(e) => {handleSubmit(e) }}
+                        <form onSubmit={(e) => {handleLoginFormSubmit(e) }}
                              class="mb-0 space-y-6">
                             <div>
                                 <div>

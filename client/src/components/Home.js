@@ -1,5 +1,7 @@
 import React, {useState, setState} from "react";
 import Axios from "axios";
+import Swal from 'sweetalert2'
+
 
 //the home component and main page for the website to calculate quotes
 export const Home = ({loggedInUser}) => {
@@ -65,6 +67,9 @@ export const Home = ({loggedInUser}) => {
         }).then(res=>{
             console.log(res.quote)
         })
+        Swal.fire({
+            title: 'Quote Sent!'
+        })
     }
 
     const [finalQuote, setFinalQuote] = useState({text: ""}) //used for getting the quote back from the server
@@ -86,13 +91,16 @@ export const Home = ({loggedInUser}) => {
         }).then(res=>{
             console.log(res.quote)
         })
+        Swal.fire({
+            title: 'Quote Saved!'
+        })
     }
     
     
     // console.log(quote)
     return (
         <div>
-            
+            <script src="sweetalert2.all.min.js"></script>
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md" >
             <h1 class="text-2xl mb-5 p-5">Generate a quote for your project</h1>
                 <div class="py-2 px-6 shadow rounded-lg sm:px-10">
