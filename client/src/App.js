@@ -1,14 +1,14 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {createBrowserRouter, createRoutesFromElements, Route, Link, Outlet, RouterProvider} from 'react-router-dom'
 import {Home} from "./components/Home"
 import {Login} from "./components/Login"
 import {Quotes} from "./components/Quotes"
 import {Register} from "./components/Register"
-import axios from 'axios';
+import Axios from 'axios';
 // import {ProtectedRoutes} from './components/ProtectedRoutes'
 
-axios.defaults.baseURL="http://localhost:5000/";
-axios.defaults.withCredentials = true;
+Axios.defaults.baseURL="http://localhost:5000/";
+Axios.defaults.withCredentials = true;
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
@@ -16,10 +16,10 @@ function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path='/' element={<Root loginStatus={loginStatus} loggedInUsername={loggedInUsername}  />}>
+      <Route path='/' element={<Root loginStatus={loginStatus} loggedInUsername={loggedInUsername} setLoginStatus={setLoginStatus} setLoggedInUsername={setLoggedInUsername}  />}>
         {/* <Route element={<ProtectedRoutes loggedIn={loginStatus}/>}> */}
           <Route path='/' index element={<Home loggedInUser={loggedInUsername} />}/>
-          <Route path='/Login' element={<Login setLoginStatus={setLoginStatus} setLoggedInUsername={setLoggedInUsername}/>}/>
+          <Route path='/Login' element={<Login setLoginStatus={setLoginStatus} setLoggedInUsername={setLoggedInUsername} loginStatus={loginStatus} loggedInUsername={loggedInUsername}/>}/>
           <Route path='/Register' element={<Register />}/>
           <Route path='/Quotes' element={<Quotes loggedInUser={loggedInUsername} />}/>
         </Route>
@@ -27,18 +27,31 @@ function App() {
     )
   )
 
+  
+  
+
   console.log(loginStatus)
 
   return (
-    <div class=" text-slate-700 h-screen font-title">
+    <div  class=" text-slate-700 h-screen font-title">
       <RouterProvider router={router}/>
     </div>
   )
 }
 
-const Root = ({loginStatus, loggedInUsername}) => {
+const Root = ({loginStatus, loggedInUsername, setLoginStatus, setLoggedInUsername}) => {
+  useEffect(() => {
+    Axios.get("/quotes/login").then((res) => {
+      if(res.data.loggedIn == true){
+          setLoginStatus(true)
+          setLoggedInUsername(res.data.user.username)
+          console.log("LOGGED IN CHECK" + loginStatus)
+      }
+  });
+  }, [])
   return <> 
-    <div class="grid grid-cols-2 p-4 font-title  bg-gray-100 items-center shadow-lg ">
+    
+    <div class="grid grid-cols-2 p-4 font-title bg-gray-100 items-center shadow-lg selection:bg-orange-400 ">
       <div class="flex space-x-5 border-gray-700">
         <h1 class="text-2xl text-orange-500 font-medium">Project Quote Generator
         </h1>
@@ -53,7 +66,7 @@ const Root = ({loginStatus, loggedInUsername}) => {
       </div>
       
     </div>
-    <div>
+    <div class="selection:bg-orange-400">
       <Outlet />
       <h1>Login Status : {String(loginStatus)}</h1>
       <h1>Logged in Username: {loggedInUsername}</h1>

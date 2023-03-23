@@ -5,7 +5,7 @@ import axios from 'axios';
 //import { listenerCount } from '../../../server/models/userAccount';
 
 
-export const Login = ({setLoginStatus, setLoggedInUsername}) => {
+export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedInUsername}) => {
     const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -13,25 +13,26 @@ export const Login = ({setLoginStatus, setLoggedInUsername}) => {
     const [loginMessage, setloginMessage] = useState('');
     //const [loginStatus, setLoginStatus] = useState('');
     var loginStatus;
+    //let loginStatus = false;
     
-    useEffect(() => {
-        Axios.get("/quotes/login").then((res) => {
-            if(res.data.loggedIn == true){
-                setLoginStatus(true)
-                loginStatus = true;
-                setloginMessage("Logged in as: " + res.data.user.username)
-                setLoggedInUsername(res.data.user.username)
-            }
-        });
-    },[]);
+    // useEffect(() => {
+        // Axios.get("/quotes/login").then((res) => {
+        //     if(res.data.loggedIn == true){
+        //         setLoginStatus(true)
+        //         loginStatus = true;
+        //         setloginMessage("Logged in as: " + res.data.user.username)
+        //         setLoggedInUsername(res.data.user.username)
+        //     }
+        // });
+    // },[]);
     
-    const handleSubmit = async (e) => {
+    const handleLoginFormSubmit = async (e) => {
         e.preventDefault();
         //console.log(userName, password)
         
         setUsername('');
         setPassword('');
-        Axios.post("/quotes/login",{
+        await Axios.post("/quotes/login",{
             username: userName,
             password: password
         }).then(res=>{
@@ -43,34 +44,40 @@ export const Login = ({setLoginStatus, setLoggedInUsername}) => {
                 loginStatus = true;
             }
         })
-    }
-    const Logout = async(e) => {
-        Axios.get('/quotes/logout').then((res) => {
-            if(res.data.loggedIn == false){
-                setloginMessage("Logged Out")
-                setLoggedInUsername('')
-                setLoginStatus(false)
-                loginStatus = false
+        await Axios.get("/quotes/login").then((res) => {
+            if(res.data.loggedIn == true){
+                setLoginStatus(true)
+                loginStatus = true;
+                setLoggedInUsername(res.data.user.username)
+                window.location.reload();
+                console.log("LOGIN CHECKED")
             }
         });
     }
-    console.log("LoGIN" + loginStatus)
-    if({loginStatus} == true){
+
+    const Logout = async(e) => {
+        e.preventDefault();
+        
+    }
+
+    if(loginStatus == true){
         return (<div>
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md" >
-                <h1 class="text-4xl mb-5">Welcome...</h1>
+                <div class="flex justify-center space-x-10 text-4xl mb-5">
+                    <h1>Welcome...</h1>
+                    <h1 class="text-orange-400">{loggedInUsername}</h1>
+                </div>
                 <div class="py-2 px-6 sm:px-10">
                     <div class="text-2xl text-orange-500 text-center">
-                        <h1>{loginMessage}</h1>
                         <h1>{loginStatus}</h1>
                     </div>
                 </div>
-                <div class="space-x-2 flex justify-center px-10 flex-wrap mt-10">
+                <div class="space-x-5 flex justify-center px-10 flex-wrap mt-10">
                     <Link to='/' class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5">Create a Quote</Link>
                     <Link to='/Quotes' class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5">View Quotes</Link>
                 </div>
-                <div class="space-x-2 flex justify-center px-10 flex-wrap mt-5">
-                    <button class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5" onClick={(e) => Logout(e)}>Logout</button>
+                <div class="flex justify-center mt-5">
+                    <button class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5 px-10">Logout</button>
                 </div>
             </div>
 
@@ -87,7 +94,7 @@ export const Login = ({setLoginStatus, setLoggedInUsername}) => {
                             <h1>{loginStatus}</h1>
                         </div>
                         
-                        <form onSubmit={(e) => {handleSubmit(e) }}
+                        <form onSubmit={(e) => {handleLoginFormSubmit(e) }}
                              class="mb-0 space-y-6">
                             <div>
                                 <div>

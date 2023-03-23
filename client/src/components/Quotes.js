@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Axios from "axios";
+import Swal from 'sweetalert2'
 
 export const Quotes = ({loggedInUser}) => {
     const [quoteData, setQuoteData] = useState([]); //state for the quotes to go
@@ -27,6 +28,9 @@ export const Quotes = ({loggedInUser}) => {
             projectName: quoteName
         }).then(res=>{
             console.log()
+        })
+        Swal.fire({
+            title: 'Quote Deleted!'
         })
         window.location.reload()
     }
