@@ -12,7 +12,7 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
 
     const [loginMessage, setloginMessage] = useState('');
     //const [loginStatus, setLoginStatus] = useState('');
-    var loginStatus;
+    //var loginStatus;
     //let loginStatus = false;
     
     // useEffect(() => {
@@ -41,13 +41,13 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
             if(loginMessage == "Logged In"){
                 setLoginStatus(true);
                 setLoggedInUsername(userName)
-                loginStatus = true;
+                //loginStatus = true;
             }
         })
         await Axios.get("/quotes/login").then((res) => {
             if(res.data.loggedIn == true){
                 setLoginStatus(true)
-                loginStatus = true;
+                //loginStatus = true;
                 setLoggedInUsername(res.data.user.username)
                 window.location.reload();
                 console.log("LOGIN CHECKED")
@@ -57,7 +57,14 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
 
     const Logout = async(e) => {
         e.preventDefault();
-        
+        Axios.get('/quotes/logout').then((res) => {
+            if(res.data.loggedIn == false){
+                setloginMessage("Logged Out")
+                setLoggedInUsername('')
+                setLoginStatus(false)
+                
+            }
+        });
     }
 
     if(loginStatus == true){
@@ -77,7 +84,7 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
                     <Link to='/Quotes' class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5">View Quotes</Link>
                 </div>
                 <div class="flex justify-center mt-5">
-                    <button class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5 px-10">Logout</button>
+                    <button class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5 px-10" onClick={(e) => Logout(e)}>Logout</button>
                 </div>
             </div>
 
