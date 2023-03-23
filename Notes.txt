@@ -8,3 +8,10 @@ when logged in it stays when changing pages but after refresh the logged in stat
 general cleanup, messy logs and missing a lot off ; at the end;
 
 useability will be improved when the major issue is fixed
+
+when refrashing on the wuotes page the quotes dissapear but not thwn navigating just when refreshing.
+i need to have a way to remove the edit on the quote because there is an error if i edit it twice
+
+need to have a system to not save quotes if not logged in
+
+admin stuff according to coursework

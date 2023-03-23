@@ -6,11 +6,11 @@ import axios from 'axios';
 
 
 export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedInUsername}) => {
-    const [userName, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [userName, setUsername] = useState(''); //username
+    const [password, setPassword] = useState(''); //password
 
 
-    const [loginMessage, setloginMessage] = useState('');
+    const [loginMessage, setloginMessage] = useState(''); //state for login message
     //const [loginStatus, setLoginStatus] = useState('');
     //var loginStatus;
     //let loginStatus = false;
@@ -26,25 +26,25 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
         // });
     // },[]);
     
-    const handleLoginFormSubmit = async (e) => {
+    const handleLoginFormSubmit = async (e) => { //when the login form is submited
         e.preventDefault();
         //console.log(userName, password)
         
         setUsername('');
         setPassword('');
-        await Axios.post("/quotes/login",{
+        await Axios.post("/quotes/login",{ //send the data from input to the server and perform a login check
             username: userName,
             password: password
-        }).then(res=>{
+        }).then(res=>{ //response from server
             console.log(res.data)
             setloginMessage(res.data)
-            if(loginMessage == "Logged In"){
+            if(loginMessage == "Logged In"){ //if the server sends a login message - login
                 setLoginStatus(true);
                 setLoggedInUsername(userName)
                 //loginStatus = true;
             }
         })
-        await Axios.get("/quotes/login").then((res) => {
+        await Axios.get("/quotes/login").then((res) => { //performs another check using the get in order to update the change of the DOM
             if(res.data.loggedIn == true){
                 setLoginStatus(true)
                 //loginStatus = true;
@@ -55,9 +55,9 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
         });
     }
 
-    const Logout = async(e) => {
+    const Logout = async(e) => { //logout
         e.preventDefault();
-        Axios.get('/quotes/logout').then((res) => {
+        Axios.get('/quotes/logout').then((res) => { //logs out and sets all of the varables to false
             if(res.data.loggedIn == false){
                 setloginMessage("Logged Out")
                 setLoggedInUsername('')
@@ -67,7 +67,7 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
         });
     }
 
-    if(loginStatus == true){
+    if(loginStatus == true){ //if not logged in display login otherwise display links and buttons to function as a profile page
         return (<div>
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md" >
                 <div class="flex justify-center space-x-10 text-4xl mb-5">

@@ -21,13 +21,13 @@ router.get('/sendQuote', (req, res) => { //sends the new calculated quote back t
     console.log(quotePrice)
 });
 
-router.use('/saveQuote', async(req, res) => {
+router.use('/saveQuote', async(req, res) => { //saves the quote in database
     let data = req.body;
     console.log(data)
     console.log(finalCost)
-    try {
+    try { //makes a new quote with data taken from the request aswell as from the global variables in server
         
-        const quote = new Quote({
+        const quote = new Quote({ //new quote to be insrted with the following
             projectName: data.projectName,
             projectDescription: data.projectDescription,
             employeePay: totalPay,
@@ -37,49 +37,51 @@ router.use('/saveQuote', async(req, res) => {
             createdBy: data.username
     
         });
-        const newQuote = await quote.save()
+        const newQuote = await quote.save() //saves new quote
         console.log(quote);
-    } catch (e) {
+    } catch (e) { //if error
         console.log(e.message)
     }
     
 });
 
-router.use('/getAllQuotes', async(req, res) => {
+router.use('/getAllQuotes', async(req, res) => { //gets all quotes from the database
     let user = req.body.username
     console.log(user)
-    const quoteData = await Quote.find({createdBy: user})
+    const quoteData = await Quote.find({createdBy: user}) //finds all quotes created by the user
     console.log(quoteData)
-    res.json(quoteData);
+    res.json(quoteData); //sends the quotes as a json
 });
 
-router.use('/deleteQuote', async(req, res) => {
+router.use('/deleteQuote', async(req, res) => { //deletes a quote 
     let quoteName = req.body
     console.log(quoteName)
-    const quoteData = await Quote.findOneAndDelete({projectName: quoteName.projectName})
+    const quoteData = await Quote.findOneAndDelete({projectName: quoteName.projectName}) //finds quote by its name from the client and deletes it
     console.log("Deleted Entry")
 });
 
-router.use('/editQuote', async(req, res) => {
-    let oldQuoteName = req.body.projectName;
-    let newQuoteName = req.body.newName.newQuote;
+router.use('/editQuote', async(req, res) => { //edits a quote
+    let oldQuoteName = req.body.projectName; //old name
+    let newQuoteName = req.body.newName.newQuote; //new name
+    console.log("NEW QUOTE " + newQuoteName)
     console.log(oldQuoteName, newQuoteName)
-    const quoteData = await Quote.findOne({projectName: oldQuoteName})
-    quoteData.projectName = newQuoteName;
-    await quoteData.save()
+    const quoteData = await Quote.findOne({projectName: oldQuoteName}) //finds the quote to be changed
+    console.log(quoteData)
+    quoteData.projectName = newQuoteName; //change quote
+    await quoteData.save() //save changed quote
 
 });
 
-router.get('/login', (req, res) => {
-    if (req.session.user) {
+router.get('/login', (req, res) => { //login get route //login checker
+    if (req.session.user) { //if logged in
         res.send({loggedIn: true, user: req.session.user})
     } else {
         res.send({loggedIn: false})
     }
 });
 
-router.get('/logout', (req, res) => {
-    if(req.session.user) {
+router.get('/logout', (req, res) => { //logout
+    if(req.session.user) { //if logged in close session and logout
         res.send({loggedIn: false})
         req.session.destroy();
     }
@@ -116,15 +118,15 @@ router.post('/login', async(req, res) => { //the login route
     }
 });
 
-router.use('/register', async(req, res) => {
+router.use('/register', async(req, res) => { //register user
     console.log(req.body.password)
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        const user = new UserAccount({
+        const hashedPassword = await bcrypt.hash(req.body.password, 10) //hash the password by 10 characters
+        const user = new UserAccount({ //creates new account in database
             username: req.body.username,
             password: hashedPassword
         });
-        const newUser = await user.save()
+        const newUser = await user.save() //saves new user
         console.log(user)
     } catch (e) {
         console.log(e.message)

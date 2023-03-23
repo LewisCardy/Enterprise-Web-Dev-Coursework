@@ -24,29 +24,33 @@ export const Quotes = ({loggedInUser}) => {
     }, []);
     
     function deleteQuote(quoteName){ //deletes the quote
-        Axios.post('/quotes/deleteQuote',{
+        Axios.post('/quotes/deleteQuote',{ //posts to the url the name of the quote to be deleted
             projectName: quoteName
         }).then(res=>{
             console.log()
         })
-        Swal.fire({
+        Swal.fire({ //alert for quote deletion
             title: 'Quote Deleted!'
         })
         window.location.reload()
     }
 
-    const handleQuoteChange = (e) => {
+    const handleQuoteChange = (e) => { //when the quote data changes
         setNewQuote(e.target.value);
     };
 
-    function editQuote(oldName, newName){
-        Axios.post('/quotes/editQuote',{
+    const editQuote = async(oldName, newName) =>{ //edits the quote in the database using the old name from the table and a new name from the input box
+        await Axios.post('/quotes/editQuote',{
             projectName: oldName,
             newName: newName
         }).then(res=>{
             console.log()
         });
-        window.location.reload()
+        Swal.fire({ //quote edit alert
+            title: 'Quote Edited!'
+        })
+        
+        
     }
 
 
