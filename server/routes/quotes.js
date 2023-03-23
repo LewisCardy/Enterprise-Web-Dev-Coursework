@@ -3,7 +3,7 @@ const { default: mongoose } = require('mongoose');
 const router = express.Router()
 const Quote = require('../models/Quote')
 const UserAccount = require('../models/userAccount')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 
 let finalCost; //final quote cost
 let totalPay = 0;
@@ -58,6 +58,16 @@ router.use('/deleteQuote', async(req, res) => {
     console.log(quoteName)
     const quoteData = await Quote.findOneAndDelete({projectName: quoteName.projectName})
     console.log("Deleted Entry")
+});
+
+router.use('/editQuote', async(req, res) => {
+    let oldQuoteName = req.body.projectName;
+    let newQuoteName = req.body.newName.newQuote;
+    console.log(oldQuoteName, newQuoteName)
+    const quoteData = await Quote.findOne({projectName: oldQuoteName})
+    quoteData.projectName = newQuoteName;
+    await quoteData.save()
+
 });
 
 router.get('/login', (req, res) => {

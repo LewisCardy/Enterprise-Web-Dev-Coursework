@@ -3,6 +3,7 @@ import Axios from "axios";
 
 export const Quotes = ({loggedInUser}) => {
     const [quoteData, setQuoteData] = useState([]); //state for the quotes to go
+    const [newQuote, setNewQuote] = useState('');
 
     useEffect(() => { //gets the quotes from the api and sets the quote data to the data fetched
         Axios.post("/quotes/getAllQuotes",{
@@ -30,6 +31,21 @@ export const Quotes = ({loggedInUser}) => {
         window.location.reload()
     }
 
+    const handleQuoteChange = (e) => {
+        setNewQuote(e.target.value);
+    };
+
+    function editQuote(oldName, newName){
+        Axios.post('/quotes/editQuote',{
+            projectName: oldName,
+            newName: newName
+        }).then(res=>{
+            console.log()
+        });
+        window.location.reload()
+    }
+
+
     return (
         <div class="mt-10 sm:mx-auto sm:w-full px-20 pt-5" >
             <h1 class="text-2xl mb-5">Quotes</h1>
@@ -47,6 +63,7 @@ export const Quotes = ({loggedInUser}) => {
                                         <th class="px-6 py-3">Item Cost</th>
                                         <th class="px-6 py-3">Quote</th>
                                         <th class="px-6 py-3"></th>
+                                        <th class="px-6 py-3"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -54,14 +71,14 @@ export const Quotes = ({loggedInUser}) => {
                                     quoteData.map((getQuote)=>( //mpas the quote data to table data and display the quotes
                                             
                                         <tr class="border-b dark:border-neutral-500 text-center hover:bg-orange-100">
-                                            <td class="whitespace-nowrap px-6 py-4 font-medium">{getQuote.projectName}</td>
+                                            <td class="whitespace-nowrap px-6 py-4 font-medium"><input type="text" defaultValue={getQuote.projectName} onChange={handleQuoteChange}></input></td>
                                             <td class="whitespace-nowrap px-6 py-4">{getQuote.projectDescription}</td>
                                             <td class="whitespace-nowrap px-6 py-4">{getQuote.employeeHours}</td>
                                             <td class="whitespace-nowrap px-6 py-4">{getQuote.employeePay}</td>
                                             <td class="whitespace-nowrap px-6 py-4">{getQuote.items}</td>
                                             <td class="whitespace-nowrap px-6 py-4">{getQuote.finalQuote}</td>
                                             <td class="whitespace-nowrap px-6 py-4"><button class="bg-orange-400 rounded-lg shadow-lg text-center px-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={() => deleteQuote(getQuote.projectName)}>X</button></td>
-                                            
+                                            <td class="whitespace-nowrap px-6 py-4"><button class="bg-orange-400 rounded-lg shadow-lg text-center px-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={() => editQuote(getQuote.projectName, {newQuote})}>Edit</button></td>
                                         </tr>
                                         ))
                                     }

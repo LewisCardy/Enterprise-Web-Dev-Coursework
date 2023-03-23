@@ -12,7 +12,7 @@ export const Login = ({setLoginStatus, setLoggedInUsername}) => {
 
     const [loginMessage, setloginMessage] = useState('');
     //const [loginStatus, setLoginStatus] = useState('');
-    let loginStatus = false;
+    var loginStatus;
     
     useEffect(() => {
         Axios.get("/quotes/login").then((res) => {
@@ -37,10 +37,24 @@ export const Login = ({setLoginStatus, setLoggedInUsername}) => {
         }).then(res=>{
             console.log(res.data)
             setloginMessage(res.data)
+            if(loginMessage == "Logged In"){
+                setLoginStatus(true);
+                setLoggedInUsername(userName)
+                loginStatus = true;
+            }
         })
-
     }
-
+    const Logout = async(e) => {
+        Axios.get('/quotes/logout').then((res) => {
+            if(res.data.loggedIn == false){
+                setloginMessage("Logged Out")
+                setLoggedInUsername('')
+                setLoginStatus(false)
+                loginStatus = false
+            }
+        });
+    }
+    console.log("LoGIN" + loginStatus)
     if({loginStatus} == true){
         return (<div>
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md" >
@@ -54,6 +68,9 @@ export const Login = ({setLoginStatus, setLoggedInUsername}) => {
                 <div class="space-x-2 flex justify-center px-10 flex-wrap mt-10">
                     <Link to='/' class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5">Create a Quote</Link>
                     <Link to='/Quotes' class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5">View Quotes</Link>
+                </div>
+                <div class="space-x-2 flex justify-center px-10 flex-wrap mt-5">
+                    <button class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5" onClick={(e) => Logout(e)}>Logout</button>
                 </div>
             </div>
 

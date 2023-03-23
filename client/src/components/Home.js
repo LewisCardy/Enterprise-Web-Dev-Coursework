@@ -175,6 +175,9 @@ export const Home = ({loggedInUser}) => {
                                 <button class="hover:text-orange-500 hover:font-semibold text-sm text-blue-400" type="button" onClick={ItemAdd}>Add Item</button>
                             </div>
                         </div>
+                        <div class="flex justify-center text-orange-500 text-center">
+                            <p>Quote calculated from (hours worked x hourly pay) + extra expenses</p>
+                        </div>
                         {/* Get quote button */}
                         <div class="grid grid-cols-1 justify-center">
                             <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={(e)=> {sendQuote(e); getQuote()}}>Get Quote</button>
