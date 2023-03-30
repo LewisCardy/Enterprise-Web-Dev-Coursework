@@ -1,5 +1,6 @@
 import {useRef, useState, useEffect} from 'react';
 import Axios from "axios";
+import Swal from 'sweetalert2'
 
 export const Register = () => {
     const userRef = useRef();

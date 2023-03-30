@@ -14,7 +14,7 @@ let juniorPay = 10;
 let standardPay = 20;
 let seniorPay = 30;
 
-let fudgeFactor = Math.floor(Math.random() * 1.5) + 0.5;
+let fudgeFactor = 10;//Math.floor(Math.random() * 1.5) + 0.5;
 
 router.use('/getQuote', (req, res) => { //gets the quote sent from the front end
     let data = req.body;
@@ -22,7 +22,8 @@ router.use('/getQuote', (req, res) => { //gets the quote sent from the front end
 });
 
 router.get('/sendQuote', (req, res) => { //sends the new calculated quote back to the front end
-    let quotePrice = finalCost * fudgeFactor;
+    finalCost = finalCost * fudgeFactor;
+    let quotePrice = finalCost;
     res.end(JSON.stringify(quotePrice))
     console.log(quotePrice)
 });
@@ -79,6 +80,7 @@ router.use('/editQuote', async(req, res) => { //edits a quote
 });
 
 router.get('/login', (req, res) => { //login get route //login checker
+    console.log(req.session.user)
     if (req.session.user) { //if logged in
         res.send({loggedIn: true, user: req.session.user})
     } else {
@@ -169,11 +171,6 @@ function CalculateProjectCost(data){ //calculates the quote using the data sent 
 }
 
 function CalculateEmployeeCost(data){ //calculates the pay for the employees
-    //standard hourly rates depending on employee type
-    
-
-    
-
     //base hours
     let juniorHours = 0;
     let standardHours = 0;

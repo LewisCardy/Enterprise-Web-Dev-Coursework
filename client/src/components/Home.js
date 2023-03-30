@@ -5,7 +5,18 @@ import Swal from 'sweetalert2'
 
 //the home component and main page for the website to calculate quotes
 export const Home = ({loggedInUser}) => {
+
     const [employeeList, setEmployeeList] = useState([{employeeType: "", employeeHours: ""}]); //list of employees to add multiple instead of one.
+
+    const [quote, setQuote] = useState({ //structure of the quote to be updated and sent to the backend
+        projectName: "",
+        projectDescription: "",
+        employees: "",
+        items: ""
+    })
+
+    const [finalQuote, setFinalQuote] = useState({text: ""}) //used for getting the quote back from the server
+
     const EmployeeAdd = () => { //adds employee input boxes to the webpage
         setEmployeeList([...employeeList, {employeeType: "", employeeHours: ""}]);
     }
@@ -41,14 +52,8 @@ export const Home = ({loggedInUser}) => {
         setItemList(newItemList)
     }
 
-    const url = "/quotes/getQuote"
-    const [quote, setQuote] = useState({ //structure of the quote to be updated and sent to the backend
-        projectName: "",
-        projectDescription: "",
-        employees: "",
-        items: ""
-    })
-    function handleQuoteChange(e){ //when the input is changed update the quote data
+    
+    const handleQuoteChange = (e) =>{ //when the input is changed update the quote data
         const newQuote={...quote}
         newQuote[e.target.id] = e.target.value
         newQuote.employees = employeeList
@@ -57,32 +62,33 @@ export const Home = ({loggedInUser}) => {
         
     }
 
-    function sendQuote(e){ //sends the quote to the url in the server which will handle the data, process and calcualte the final quote
+    const sendQuote = async(e) =>{ //sends the quote to the url in the server which will handle the data, process and calcualte the final quote
         e.preventDefault()
-        Axios.post(url,{
+        await Axios.post("/quotes/getQuote",{
             projectName: quote.projectName,
             projectDescription: quote.projectDescription,
             employees: quote.employees,
             items: quote.items
         }).then(res=>{
             console.log(res.quote)
+            Swal.fire({
+                title: 'Quote Sent!'
+            })
         })
-        Swal.fire({
-            title: 'Quote Sent!'
-        })
+        
     }
 
-    const [finalQuote, setFinalQuote] = useState({text: ""}) //used for getting the quote back from the server
-    function getQuote(){
+    
+    const getQuote = () =>{
         Axios.get("/quotes/sendQuote").then( res =>{ //gets the quote calculation from the server and updates the text
             const newFinalQuote = res.data;
             setFinalQuote({text: newFinalQuote})
         });
     }
 
-    function saveQuote(e){ //sends the quote to the url in the server which will handle the data, process and calcualte the final quote
+    const saveQuote = async(e) =>{ //sends the quote to the url in the server which will handle the data, process and calcualte the final quote
         e.preventDefault()
-        Axios.post("/quotes/saveQuote",{
+        await Axios.post("/quotes/saveQuote",{
             projectName: quote.projectName,
             projectDescription: quote.projectDescription,
             employees: quote.employees,
@@ -90,10 +96,11 @@ export const Home = ({loggedInUser}) => {
             username: loggedInUser
         }).then(res=>{
             console.log(res.quote)
+            Swal.fire({
+                title: 'Quote Saved!'
+            })
         })
-        Swal.fire({
-            title: 'Quote Saved!'
-        })
+        
     }
     
     

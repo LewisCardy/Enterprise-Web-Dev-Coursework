@@ -16,20 +16,6 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
 
 
     const [loginMessage, setloginMessage] = useState(''); //state for login message
-    //const [loginStatus, setLoginStatus] = useState('');
-    //var loginStatus;
-    //let loginStatus = false;
-    
-    // useEffect(() => {
-        // Axios.get("/quotes/login").then((res) => {
-        //     if(res.data.loggedIn == true){
-        //         setLoginStatus(true)
-        //         loginStatus = true;
-        //         setloginMessage("Logged in as: " + res.data.user.username)
-        //         setLoggedInUsername(res.data.user.username)
-        //     }
-        // });
-    // },[]);
     
     const handleLoginFormSubmit = async (e) => { //when the login form is submited
         e.preventDefault();
@@ -75,9 +61,9 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
         });
     }
 
-    const changeEmployeePay = async(employeeType) =>{
+    const changeEmployeePay = async(employeeType) =>{ //changes employee pay
         let newPay;
-        if(employeeType == "junior"){
+        if(employeeType == "junior"){ //makes sure the right pay is changing
             newPay = juniorPay;
         } else if(employeeType == "standard"){
             newPay = standardPay;
@@ -85,7 +71,7 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
             newPay = seniorPay;
         }
         console.log("Type " + employeeType + " Pay " + newPay)
-        Axios.post("/quotes/changeEmployeePay",{
+        Axios.post("/quotes/changeEmployeePay",{ //sends the employee type and the new pay to server
             employeeTypeToChange: employeeType,
             payChange: newPay
         }).then(res=>{
@@ -93,7 +79,7 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
         });
     }
 
-    const resetFudgeFactor = async(e) => {
+    const resetFudgeFactor = async(e) => { //resets fudge to 0 so that a quote without it can be made
         e.preventDefault();
         await Axios.post("/quotes/resetFudgeFactor",{
             fudgeFactor: 0
