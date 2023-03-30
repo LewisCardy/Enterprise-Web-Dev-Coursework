@@ -10,13 +10,19 @@ let totalPay = 0;
 let totalHours = 0;
 let itemPrice = 0;
 
+let juniorPay = 10;
+let standardPay = 20;
+let seniorPay = 30;
+
+let fudgeFactor = Math.floor(Math.random() * 1.5) + 0.5;
+
 router.use('/getQuote', (req, res) => { //gets the quote sent from the front end
     let data = req.body;
     CalculateProjectCost(data) //calculates quote
 });
 
 router.get('/sendQuote', (req, res) => { //sends the new calculated quote back to the front end
-    let quotePrice = finalCost;
+    let quotePrice = finalCost * fudgeFactor;
     res.end(JSON.stringify(quotePrice))
     console.log(quotePrice)
 });
@@ -110,7 +116,9 @@ router.post('/login', async(req, res) => { //the login route
         if (isDetailsCorrect){ //if all details correct
             
             res.send('Logged in')
-        } else { //else details incorrect
+        } else if (isDetailsCorrect && req.body.username == "admin"){
+            res.send('Logged in as Admin')
+        }else { //else details incorrect
             res.send('Username/Password Incorrect')
         }
     } catch (e) { //login route error
@@ -134,6 +142,23 @@ router.use('/register', async(req, res) => { //register user
     
 });
 
+router.use('/changeEmployeePay', async(req, res) => {
+    if(req.body.employeeTypeToChange == "junior"){
+        juniorPay = req.body.payChange
+    } else if(req.body.employeeTypeToChange == "standard"){
+        standardPay = req.body.payChange
+    } else {
+        seniorPay = req.body.payChange
+    }
+    console.log(juniorPay + " " + standardPay + " " + seniorPay)
+});
+
+router.use('/resetFudgeFactor', async(req, res) => {
+    console.log(fudgeFactor)
+    fudgeFactor = req.body.fudgeFactor
+    console.log(fudgeFactor)
+});
+
 
 function CalculateProjectCost(data){ //calculates the quote using the data sent from the front end
     finalCost = CalculateEmployeeCost(data) + CalculateItemCost(data)
@@ -145,13 +170,9 @@ function CalculateProjectCost(data){ //calculates the quote using the data sent 
 
 function CalculateEmployeeCost(data){ //calculates the pay for the employees
     //standard hourly rates depending on employee type
-    let juniorPay = 10;
-    let standardPay = 20;
-    let seniorPay = 30;
+    
 
-    let fudgeFactor = Math.floor(Math.random() * 1.5) + 0.5;
-
-    standardPay = standardPay *  fudgeFactor;
+    
 
     //base hours
     let juniorHours = 0;

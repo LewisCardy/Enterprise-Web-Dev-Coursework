@@ -9,6 +9,11 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
     const [userName, setUsername] = useState(''); //username
     const [password, setPassword] = useState(''); //password
 
+    const [juniorPay, setJuniorPay] = useState(0); //junior pay
+    const [standardPay, setStandardPay] = useState(0); //standard pay
+    const [seniorPay, setSeniorPay] = useState(0); //senior pay
+
+
 
     const [loginMessage, setloginMessage] = useState(''); //state for login message
     //const [loginStatus, setLoginStatus] = useState('');
@@ -42,6 +47,9 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
                 setLoginStatus(true);
                 setLoggedInUsername(userName)
                 //loginStatus = true;
+            } else if (loginMessage == "Logged In As Admin"){
+                setLoginStatus(true);
+                setLoggedInUsername(userName);
             }
         })
         await Axios.get("/quotes/login").then((res) => { //performs another check using the get in order to update the change of the DOM
@@ -67,7 +75,32 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
         });
     }
 
-    if(loginStatus == true){ //if not logged in display login otherwise display links and buttons to function as a profile page
+    const changeEmployeePay = async(employeeType) =>{
+        let newPay;
+        if(employeeType == "junior"){
+            newPay = juniorPay;
+        } else if(employeeType == "standard"){
+            newPay = standardPay;
+        } else if(employeeType == "senior"){
+            newPay = seniorPay;
+        }
+        console.log("Type " + employeeType + " Pay " + newPay)
+        Axios.post("/quotes/changeEmployeePay",{
+            employeeTypeToChange: employeeType,
+            payChange: newPay
+        }).then(res=>{
+            console.log("Employee Pay Changed")
+        });
+    }
+
+    const resetFudgeFactor = async(e) => {
+        e.preventDefault();
+        await Axios.post("/quotes/resetFudgeFactor",{
+            fudgeFactor: 0
+        });
+    }
+
+    if(loginStatus == true && loggedInUsername != "admin"){ //if not logged in display login otherwise display links and buttons to function as a profile page
         return (<div>
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md" >
                 <div class="flex justify-center space-x-10 text-4xl mb-5">
@@ -90,7 +123,41 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
 
         </div>)
     
-    } else {
+    } if (loginStatus == true && loggedInUsername == "admin"){
+        return(
+            <div>
+                <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md" >
+                <h1 class="text-2xl mb-5">Admin Account</h1>
+                    <div class="py-2 px-6 shadow rounded-lg sm:px-10">
+                        <div>
+                            <h1>Employee Pay Per Hour</h1>
+                        </div>
+                        <div class="grid grid-cols-3 items-center">
+                            <p class="text-sm text-gray-600 text-center font-bold">Junior Pay</p>
+                            <input onChange={(e) => setJuniorPay(e.target.value)} value={juniorPay} type="number" autoComplete='off' class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
+                            <button onClick={(junior)=>changeEmployeePay("junior")} class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Edit</button>
+                        </div>
+                        <div class="grid grid-cols-3 items-center">
+                            <p class="text-sm text-gray-600 text-center font-bold">Standard Pay</p>
+                            <input onChange={(e) => setStandardPay(e.target.value)} value={standardPay} type="number" autoComplete='off' class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
+                            <button onClick={(standard)=>changeEmployeePay(standard)} class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Edit</button>
+                        </div>
+                        <div class="grid grid-cols-3 items-center">
+                            <p class="text-sm text-gray-600 text-center font-bold">Senior Pay</p>
+                            <input onChange={(e) => setSeniorPay(e.target.value)} value={seniorPay} type="number" autoComplete='off' class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
+                            <button onClick={(senior)=>changeEmployeePay(senior)} class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Edit</button>
+                        </div>
+                        <div class="grid grid-cols-1 justify-center mt-5">
+                            <button  onClick={(e)=>resetFudgeFactor(e)} class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Reset Fudge Factor</button>
+                        </div>
+                        <div class="flex justify-center mt-5">
+                            <button class="hover:bg-orange-200 bg-orange-300 rounded-lg p-5 px-10" onClick={(e) => Logout(e)}>Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )           
+    }else {
         return (
             <div>
                 <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md" >
