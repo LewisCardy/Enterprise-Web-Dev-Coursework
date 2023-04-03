@@ -126,12 +126,12 @@ export const Login = ({setLoginStatus, setLoggedInUsername, loginStatus, loggedI
                         <div class="grid grid-cols-3 items-center">
                             <p class="text-sm text-gray-600 text-center font-bold">Standard Pay</p>
                             <input onChange={(e) => setStandardPay(e.target.value)} value={standardPay} type="number" autoComplete='off' class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
-                            <button onClick={(standard)=>changeEmployeePay(standard)} class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Edit</button>
+                            <button onClick={(standard)=>changeEmployeePay("standard")} class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Edit</button>
                         </div>
                         <div class="grid grid-cols-3 items-center">
                             <p class="text-sm text-gray-600 text-center font-bold">Senior Pay</p>
                             <input onChange={(e) => setSeniorPay(e.target.value)} value={seniorPay} type="number" autoComplete='off' class="w-full border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"></input>
-                            <button onClick={(senior)=>changeEmployeePay(senior)} class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Edit</button>
+                            <button onClick={(senior)=>changeEmployeePay("senior")} class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Edit</button>
                         </div>
                         <div class="grid grid-cols-1 justify-center mt-5">
                             <button  onClick={(e)=>resetFudgeFactor(e)} class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Reset Fudge Factor</button>

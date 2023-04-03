@@ -7,28 +7,5 @@ i need to have a way to remove the edit on the quote because there is an error i
 
 //KEEP IN MIND FOR THE SCRIPT AND SERVER SETUP
 create admin account with secure password and username admin
+password found in code - use that one
 create the environment variable for the cookie secret
-
-//VIDEO FORMAT
-showcase all pages of the website
-create an account - show in database password hashed
-login to the account - show the cookie
-create a quote 
-add some more employees and items - create quote
-show some server with the fudge factor
-save quote
-show database with quote and created by
-show quotes page with created quote
-change quote name - show database
-delete quote - show database
-logout
-
-ADMIN FUNCTIONALITY
-explain already created account
-try to create admin account
-login as admin
-change employee pay values
-reset fudge
-calculate quote
-
-Page to explain all requirements met.

