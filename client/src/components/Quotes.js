@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 export const Quotes = ({loggedInUser}) => {
     const [quoteData, setQuoteData] = useState([]); //state for the quotes to go
@@ -11,28 +11,17 @@ export const Quotes = ({loggedInUser}) => {
             username: loggedInUser
         }).then(res=>{
             setQuoteData(res.data);
-        })
-
-        
-        // const getQuoteData = async () => {
-        //     const res = await fetch('http://localhost:5000/quotes/getAllQuotes');
-        //     const getData = await res.json();
-        //     setQuoteData(getData);
-        //     console.log(getData)
-        // }
-        //getQuoteData();
+        });
     }, []);
     
     function deleteQuote(quoteName){ //deletes the quote
         Axios.post('/quotes/deleteQuote',{ //posts to the url the name of the quote to be deleted
             projectName: quoteName
-        }).then(res=>{
-            console.log()
-        })
+        });
         Swal.fire({ //alert for quote deletion
             title: 'Quote Deleted!'
-        })
-        window.location.reload()
+        });
+        window.location.reload();
     }
 
     const handleQuoteChange = (e) => { //when the quote data changes
@@ -43,16 +32,11 @@ export const Quotes = ({loggedInUser}) => {
         await Axios.post('/quotes/editQuote',{
             projectName: oldName,
             newName: newName
-        }).then(res=>{
-            console.log()
         });
         Swal.fire({ //quote edit alert
             title: 'Quote Edited!'
-        })
-        
-        
+        });
     }
-
 
     return (
         <div class="mt-10 sm:mx-auto sm:w-full px-20 pt-5" >

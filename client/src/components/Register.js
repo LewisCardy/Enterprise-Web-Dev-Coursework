@@ -1,25 +1,18 @@
 import {useRef, useState, useEffect} from 'react';
 import Axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 export const Register = () => {
     const userRef = useRef();
-    const errRef = useRef();
 
-    const [userName, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [errMsg, setErrMsg] = useState('');
-    const [success, setSucess] = useState(false);
+    const [userName, setUsername] = useState(''); //username
+    const [password, setPassword] = useState(''); //password
 
     useEffect(() => {
       userRef.current.focus();
-    }, [])
-
-    useEffect(() => {
-        setErrMsg('');
-      }, [userName, password])
+    }, []);
     
-    const handleSubmit = async (e) => {
+    const registerUser = async (e) => { //when register  button pressed send to the server username and password to hash password and create account
         e.preventDefault();
         console.log(userName, password)
         setUsername('');
@@ -28,20 +21,20 @@ export const Register = () => {
             Axios.post("/quotes/register",{
                 username: userName,
                 password: password
-            }).then(res=>{
-                console.log(res.quote)
-            })
-            setSucess(true)
+            });
+            Swal.fire({ //popup
+                title: 'Account Created'
+            });
         } else {
-            console.log("Cant use this username")
-        }
-    }
+            console.log("Cant use this username");
+        };
+    };
     return (
         <div>
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md" >
             <h1 class="text-2xl mb-5">Register</h1>
                 <div class="py-2 px-6 shadow rounded-lg sm:px-10">
-                    <form onSubmit={handleSubmit} class="mb-0 space-y-6">
+                    <form onSubmit={registerUser} class="mb-0 space-y-6">
                         <div>
                             <div>
                                 <label class="block text-sm text-gray-600">Email</label>
@@ -58,7 +51,7 @@ export const Register = () => {
                         </div>
                         
                         <div class="grid grid-cols-1 justify-center">
-                            <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Sign In</button>
+                            <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold">Register</button>
                         </div>
                     </form>
                 </div>

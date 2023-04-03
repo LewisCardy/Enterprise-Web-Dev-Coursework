@@ -8,16 +8,20 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
-const cookieSecret = process.env.COOKIE_SECRET;
+const cookieSecret = process.env.COOKIE_SECRET; //cookie secret environment variable
+
+//sets up cors
 app.use(cors({
     origin: ['http://localhost:3000'],
     methods: ["POST", "GET", "USE"],
     credentials: true
 }));
+
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
-app.use(cookieParser())
+app.use(cookieParser());
 
+//sets up the seession and cookie
 app.use(session({
     key: "UserId",
     secret: "SECRET TESTING",
@@ -28,14 +32,15 @@ app.use(session({
     },
 }));
 
+//connection to database
 mongoose.connect("mongodb://localhost/quotesdb");
 const db = mongoose.connection;
 db.on('error', (error) => console.error(error));
 db.on('open', () => console.log("connected to database"));
 
-const quotesRouter = require('./routes/quotes');
-app.use('/quotes', quotesRouter)
+const quotesRouter = require('./routes/quotes'); //quotes route
+app.use('/quotes', quotesRouter);
 
-app.listen(5000, () => {
+app.listen(5000, () => { //listen on port 5000
     console.log("Server started on port 5000")
 })

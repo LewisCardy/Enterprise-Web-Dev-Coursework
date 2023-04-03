@@ -13,98 +13,90 @@ export const Home = ({loggedInUser}) => {
         projectDescription: "",
         employees: "",
         items: ""
-    })
+    });
 
-    const [finalQuote, setFinalQuote] = useState({text: ""}) //used for getting the quote back from the server
+    const [finalQuote, setFinalQuote] = useState({text: ""}); //used for getting the quote back from the server
 
     const EmployeeAdd = () => { //adds employee input boxes to the webpage
         setEmployeeList([...employeeList, {employeeType: "", employeeHours: ""}]);
-    }
+    };
 
     const EmployeeRemove = (index) => { //handles removing an employee
         const newEmployeeList = [...employeeList];
         newEmployeeList.splice(index, 1);
         setEmployeeList(newEmployeeList);
-    }
+    };
 
     const [itemList, setItemList] = useState([{itemName: "", itemPrice: ""}]); //list of items to add to the dom.
 
     const ItemAdd = () => { //adds item to the html
         setItemList([...itemList, {itemName: "", itemPrice: ""}]);
-    }
+    };
 
     const ItemRemove = (index) => { //removes item from html
         const newItemList = [...itemList];
         newItemList.splice(index, 1);
         setItemList(newItemList);
-    }
+    };
 
     const handleEmployeeChange = (e, index) => { //when the input for the employee changes
-        const {name, value} = e.target
+        const {name, value} = e.target;
         const newEmployeeList = [...employeeList];
         newEmployeeList[index][name] = value;
-        setEmployeeList(newEmployeeList)
-    }
+        setEmployeeList(newEmployeeList);
+    };
+
     const handleItemChange = (e, index) => { //input for item change
-        const {name, value} = e.target
+        const {name, value} = e.target;
         const newItemList = [...itemList];
         newItemList[index][name] = value;
-        setItemList(newItemList)
-    }
+        setItemList(newItemList);
+    };
 
     
     const handleQuoteChange = (e) =>{ //when the input is changed update the quote data
-        const newQuote={...quote}
-        newQuote[e.target.id] = e.target.value
-        newQuote.employees = employeeList
-        newQuote.items = itemList
-        setQuote(newQuote)
-        
-    }
+        const newQuote={...quote};
+        newQuote[e.target.id] = e.target.value;
+        newQuote.employees = employeeList;
+        newQuote.items = itemList;
+        setQuote(newQuote);
+    };
 
     const sendQuote = async(e) =>{ //sends the quote to the url in the server which will handle the data, process and calcualte the final quote
-        e.preventDefault()
-        await Axios.post("/quotes/getQuote",{
+        e.preventDefault();
+        Axios.post("/quotes/getQuote",{
             projectName: quote.projectName,
             projectDescription: quote.projectDescription,
             employees: quote.employees,
             items: quote.items
-        }).then(res=>{
-            console.log(res.quote)
-            Swal.fire({
+        });
+            Swal.fire({ //popup
                 title: 'Quote Sent!'
-            })
-        })
-        
-    }
+            });
+            getQuote();
+    };
 
     
     const getQuote = () =>{
         Axios.get("/quotes/sendQuote").then( res =>{ //gets the quote calculation from the server and updates the text
             const newFinalQuote = res.data;
-            setFinalQuote({text: newFinalQuote})
+            setFinalQuote({text: newFinalQuote});
         });
-    }
+    };
 
     const saveQuote = async(e) =>{ //sends the quote to the url in the server which will handle the data, process and calcualte the final quote
-        e.preventDefault()
-        await Axios.post("/quotes/saveQuote",{
+        e.preventDefault();
+        Axios.post("/quotes/saveQuote",{
             projectName: quote.projectName,
             projectDescription: quote.projectDescription,
             employees: quote.employees,
             items: quote.items,
             username: loggedInUser
-        }).then(res=>{
-            console.log(res.quote)
+        });
             Swal.fire({
                 title: 'Quote Saved!'
-            })
-        })
-        
-    }
-    
-    
-    // console.log(quote)
+            });
+    };
     return (
         <div>
             <script src="sweetalert2.all.min.js"></script>
@@ -195,7 +187,7 @@ export const Home = ({loggedInUser}) => {
                         </div>
                         {/* Get quote button */}
                         <div class="grid grid-cols-1 justify-center">
-                            <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={(e)=> {sendQuote(e); getQuote()}}>Get Quote</button>
+                            <button class="bg-orange-400 rounded-lg shadow-lg m-2 p-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={(e)=> {sendQuote(e);}}>Get Quote</button>
                         </div>
                         {/* Display final quote */}
                         <div class="grid grid-cols-2 items-center justify-center">
@@ -211,7 +203,5 @@ export const Home = ({loggedInUser}) => {
             </div>
 
     </div>
-    
-    
     )
 }

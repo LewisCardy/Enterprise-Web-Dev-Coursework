@@ -11,8 +11,8 @@ Axios.defaults.baseURL="http://localhost:5000/";
 Axios.defaults.withCredentials = true;
 
 function App() {
-  const [loginStatus, setLoginStatus] = useState(false);
-  const [loggedInUsername, setLoggedInUsername] = useState('');
+  const [loginStatus, setLoginStatus] = useState(false); //login status
+  const [loggedInUsername, setLoggedInUsername] = useState(''); //logged in user
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -27,11 +27,6 @@ function App() {
     )
   )
 
-  
-  
-
-  console.log(loginStatus)
-
   return (
     <div  class=" text-slate-700 h-screen font-title">
       <RouterProvider router={router}/>
@@ -40,15 +35,14 @@ function App() {
 }
 
 const Root = ({loginStatus, loggedInUsername, setLoginStatus, setLoggedInUsername}) => {
-  useEffect(() => {
+  useEffect(() => { //when any page is rendered check for login
     Axios.get("/quotes/login").then((res) => {
       if(res.data.loggedIn == true){
-          setLoginStatus(true)
-          setLoggedInUsername(res.data.user.username)
-          console.log("LOGGED IN CHECK" + loginStatus)
-      }
+          setLoginStatus(true);
+          setLoggedInUsername(res.data.user.username);
+      };
   });
-  }, [])
+  }, []);
   return <> 
     
     <div class="grid grid-cols-2 p-4 font-title bg-gray-100 items-center shadow-lg selection:bg-orange-400 ">
@@ -68,8 +62,9 @@ const Root = ({loginStatus, loggedInUsername, setLoginStatus, setLoggedInUsernam
     </div>
     <div class="selection:bg-orange-400">
       <Outlet />
-      <h1>Login Status : {String(loginStatus)}</h1>
-      <h1>Logged in Username: {loggedInUsername}</h1>
+      {/* DEBUG LOGIN MESSAGES */}
+      {/* <h1>Login Status : {String(loginStatus)}</h1>
+      <h1>Logged in Username: {loggedInUsername}</h1> */}
     </div>
   </>
 }

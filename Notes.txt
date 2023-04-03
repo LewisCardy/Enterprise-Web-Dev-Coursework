@@ -1,17 +1,10 @@
 NOTES FOR WEBSITE
 
-need to figure out a way to keep the logged in state at page refresh generally 
-and due to the fact when a quote is removed the page refreshes.
-
-when logged in it stays when changing pages but after refresh the logged in state goes away.
-
-general cleanup, messy logs and missing a lot off ; at the end;
-
-useability will be improved when the major issue is fixed
-
+//MINOR BUG
 when refrashing on the wuotes page the quotes dissapear but not thwn navigating just when refreshing.
 i need to have a way to remove the edit on the quote because there is an error if i edit it twice
 
-need to have a system to not save quotes if not logged in
 
-admin stuff according to coursework
+//KEEP IN MIND FOR THE SCRIPT AND SERVER SETUP
+create admin account with secure password and username admin
+create the environment variable for the cookie secret
