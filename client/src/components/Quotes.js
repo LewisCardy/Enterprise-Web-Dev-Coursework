@@ -14,14 +14,25 @@ export const Quotes = ({loggedInUser}) => {
         });
     }, []);
     
-    function deleteQuote(quoteName){ //deletes the quote
-        Axios.post('/quotes/deleteQuote',{ //posts to the url the name of the quote to be deleted
-            projectName: quoteName
-        });
-        Swal.fire({ //alert for quote deletion
-            title: 'Quote Deleted!'
-        });
-        window.location.reload();
+    function deleteQuote(quoteName, newName){ //deletes the quote
+        if(newName.newQuote != ''){ //if the quote was edited
+            Axios.post('/quotes/deleteQuote',{ //posts to the url the name of the quote to be deleted
+                projectName: newName.newQuote
+            });
+            Swal.fire({ //alert for quote deletion
+                title: 'Quote Deleted!'
+            });
+            window.location.reload();
+        } else {
+            Axios.post('/quotes/deleteQuote',{ //posts to the url the name of the quote to be deleted
+                projectName: quoteName
+            });
+            Swal.fire({ //alert for quote deletion
+                title: 'Quote Deleted!'
+            });
+            window.location.reload();
+        }
+        
     }
 
     const handleQuoteChange = (e) => { //when the quote data changes
@@ -69,7 +80,7 @@ export const Quotes = ({loggedInUser}) => {
                                             <td class="whitespace-nowrap px-6 py-4">{getQuote.employeePay}</td>
                                             <td class="whitespace-nowrap px-6 py-4">{getQuote.items}</td>
                                             <td class="whitespace-nowrap px-6 py-4">{getQuote.finalQuote}</td>
-                                            <td class="whitespace-nowrap px-6 py-4"><button class="bg-orange-400 rounded-lg shadow-lg text-center px-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={() => deleteQuote(getQuote.projectName)}>X</button></td>
+                                            <td class="whitespace-nowrap px-6 py-4"><button class="bg-orange-400 rounded-lg shadow-lg text-center px-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={() => deleteQuote(getQuote.projectName, {newQuote})}>X</button></td>
                                             <td class="whitespace-nowrap px-6 py-4"><button class="bg-orange-400 rounded-lg shadow-lg text-center px-2 hover:bg-orange-500 hover:font-semibold" type="button" onClick={() => editQuote(getQuote.projectName, {newQuote})}>Edit</button></td>
                                         </tr>
                                         ))

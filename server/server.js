@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-//const passport = require('passport');
 const app = express();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -24,7 +23,7 @@ app.use(cookieParser());
 //sets up the seession and cookie
 app.use(session({
     key: "UserId",
-    secret: "SECRET TESTING",
+    secret: process.env.COOKIE_SECRET, //environment variable for cookie secret
     resave: false,
     saveUninitialized: false,
     cookie: {

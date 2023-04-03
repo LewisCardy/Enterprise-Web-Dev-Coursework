@@ -14,7 +14,6 @@ export const Register = () => {
     
     const registerUser = async (e) => { //when register  button pressed send to the server username and password to hash password and create account
         e.preventDefault();
-        console.log(userName, password)
         setUsername('');
         setPassword('');
         if(userName != "admin"){
@@ -26,7 +25,9 @@ export const Register = () => {
                 title: 'Account Created'
             });
         } else {
-            console.log("Cant use this username");
+            Swal.fire({ //popup
+                title: 'Couldnt Create Account'
+            });
         };
     };
     return (
