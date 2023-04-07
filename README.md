@@ -2,6 +2,7 @@
 Coursework for CM4025 Enterprise Web Development
 
 Instructions for Running Website
+
 Run WebsiteScript.sh this will install required software and clone the github.
 create .env inside of the server directory and insert this line
 COOKIE_SECRET=""
@@ -13,4 +14,14 @@ in another terminal navigate to Enterprise-Web-Dev-Coursework/server and run npm
 In another terminal run mongo
 
 To create an admin account 
-//FIX THIS
+Use this line in mongo terminal
+quotesdb.useraccounts.insert(
+{
+    "username": "admin",
+    "password": "mVrsenQt'swDtW9D",
+    "__v": 0
+}
+)
+Login Details
+uername: admin
+password: mVrsenQt'swDtW9D
