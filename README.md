@@ -5,10 +5,10 @@
 
 ## Coursework for CM4025 Enterprise Web Development Instructions for Running Website
 **Setup**
-Script tested inside of blank ubuntu docker container running ports 3000 & 5000
+Script tested inside of blank ubuntu docker container running ports 3000 & 5000. copy the script file from the github to root directory of container.
 
 **Script**
-Run WebsiteScript.sh this will install required software and clone the github.
+Run WebsiteScript.sh (`sudo ./websiteScript.sh`) this will install required software and clone the github.
 
 **After Setup**
 create .env inside of the server directory and insert this line
