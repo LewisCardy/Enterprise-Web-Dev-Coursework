@@ -58,7 +58,7 @@ Software needed
 **Basic text instructions if all else fails**
  - Clone github
  - navigate to client folder
- - npm install
+ - `npm install`
  - navigate to server folder
  - `npm install`
  - `npm run` inside of client folder
